@@ -83,6 +83,17 @@ RSpec.describe "Courses API", type: :request do
           "Jane Doe"
         )
       end
+
+      it "creates course only when tutors_attributes are missing" do
+        params[:course][:tutors_attributes] = []
+
+        expect { post "/api/v1/courses", params: params, as: :json }
+          .to change(Course, :count).by(1)
+          .and change(Tutor, :count).by(0)
+
+        body = response.parsed_body
+        expect(body["tutors"]).to eq([])
+      end
     end
 
     context "with invalid parameters" do
