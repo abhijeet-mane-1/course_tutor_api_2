@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
 
   def render_parameter_missing(exception)
     render json: {
-      errors: [exception.message]
+      errors: [ exception.message ]
     }, status: :bad_request
   end
 end

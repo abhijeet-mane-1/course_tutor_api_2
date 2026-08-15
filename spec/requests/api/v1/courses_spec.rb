@@ -28,7 +28,7 @@ RSpec.describe "Courses API", type: :request do
       )
 
       expect(first_course["tutors"]).to contain_exactly(
-        { "id" => tutor1.id, "name" => "John Doe", "email" => "john@example.com"},
+        { "id" => tutor1.id, "name" => "John Doe", "email" => "john@example.com" },
         { "id" => tutor2.id, "name" => "Jane Doe", "email" => "jane@example.com" }
       )
 
@@ -65,7 +65,7 @@ RSpec.describe "Courses API", type: :request do
       }
     end
 
-    context "with valid parameters"do
+    context "with valid parameters" do
       it "creates a course with its tutors" do
         expect { post "/api/v1/courses", params: params, as: :json }
           .to change(Course, :count).by(1)
@@ -121,7 +121,7 @@ RSpec.describe "Courses API", type: :request do
 
         expect { post "/api/v1/courses", params: params, as: :json }
           .not_to change(Course, :count)
-          
+
         expect(Tutor.count).to eq(1)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.parsed_body["errors"]).to include("Tutors email has already been taken")
