@@ -1,6 +1,56 @@
 require "rails_helper"
 
 RSpec.describe "Courses API", type: :request do
+  describe "GET /api/v1/courses" do
+    it "returns all courses with their tutors" do
+      course1 = create(:course)
+      course2 = create(:course, title: "React", description: "React fundamentals")
+
+      tutor1 = create(:tutor, course: course1, name: "John Doe", email: "john@example.com")
+      tutor2 = create(:tutor, course: course1, name: "Jane Doe", email: "jane@example.com")
+      tutor3 = create(:tutor, course: course2, name: "Alice Smith", email: "alice@example.com")
+
+      get "/api/v1/courses"
+
+      expect(response).to have_http_status(:ok)
+
+      body = response.parsed_body
+
+      expect(body.size).to eq(2)
+
+      first_course = body.find { |course| course["id"] == course1.id }
+      second_course = body.find { |course| course["id"] == course2.id }
+
+      expect(first_course).to include(
+        "id" => course1.id,
+        "title" => "Ruby on Rails",
+        "description" => "Advanced Ruby on Rails course"
+      )
+
+      expect(first_course["tutors"]).to contain_exactly(
+        { "id" => tutor1.id, "name" => "John Doe", "email" => "john@example.com"},
+        { "id" => tutor2.id, "name" => "Jane Doe", "email" => "jane@example.com" }
+      )
+
+      expect(second_course).to include(
+        "id" => course2.id,
+        "title" => "React",
+        "description" => "React fundamentals"
+      )
+
+      expect(second_course["tutors"]).to contain_exactly(
+        { "id" => tutor3.id, "name" => "Alice Smith", "email" => "alice@example.com" }
+      )
+    end
+
+    it "returns an empty array when there are no courses" do
+      get "/api/v1/courses"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to eq([])
+    end
+  end
+
   describe "POST /api/v1/courses" do
     let(:params) do
       {

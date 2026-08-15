@@ -7,3 +7,5 @@ json.tutors @course.tutors do |tutor|
   json.name tutor.name
   json.email tutor.email
 end
+
+json.partial! "api/v1/courses/course", course: @course

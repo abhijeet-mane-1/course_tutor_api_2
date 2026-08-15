@@ -1,4 +1,10 @@
 class Api::V1::CoursesController < ApplicationController
+  def index
+    @courses = Course.includes(:tutors)
+
+    render :index, formats: :json, status: :ok
+  end
+
   def create
     @course = Course.create!(course_params)
 
