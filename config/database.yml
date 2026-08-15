@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  port: 5432
+  username: postgres
+  password: 1100
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+development:
+  <<: *default
+  database: course_tutor_api_development
+
+test:
+  <<: *default
+  database: course_tutor_api_test
+
+production:
+  <<: *default
+  database: course_tutor_api_production
