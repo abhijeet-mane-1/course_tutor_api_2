@@ -49,6 +49,15 @@ RSpec.describe "Courses API", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.parsed_body).to eq([])
     end
+
+    it "returns an empty tutors array when a course has no tutors" do
+      course = create(:course)
+
+      get "/api/v1/courses"
+
+      body = response.parsed_body
+      expect(body.first["tutors"]).to eq([])
+    end
   end
 
   describe "POST /api/v1/courses" do
