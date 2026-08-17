@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
 
   def handle_internal_server_error(exception)
     render json: {
-      errors: ["Something went wrong on our server. Please try again later."]
+      errors: [ "Something went wrong on our server. Please try again later." ]
     }, status: :internal_server_error
   end
 
